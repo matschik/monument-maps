@@ -5,7 +5,7 @@
 		latitude: number;
 		longitude: number;
 		options: maplibregl.MarkerOptions;
-		meta: any;
+		data: any;
 	};
 </script>
 

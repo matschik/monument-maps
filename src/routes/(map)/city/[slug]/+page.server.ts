@@ -23,12 +23,12 @@ const dbcity: { [key: string]: { title: string; bounds: Bounds } } = {
 }
 
 export const load: PageServerLoad = async ({ params }) => {
-    const city = dbcity[params.slug];
-    const monuments = await fetchMonuments(city.bounds);
-    if (city) {
+    const cityFromDb = dbcity[params.slug];
+    const monuments = await fetchMonuments(cityFromDb.bounds);
+    if (cityFromDb) {
         return {
             city: {
-                ...city,
+                ...cityFromDb,
                 monuments
             }
         };
