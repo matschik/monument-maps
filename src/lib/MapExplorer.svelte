@@ -152,8 +152,8 @@
 	};
 </script>
 
-<div class="flex overflow-hidden max-h-screen">
-	<div class="flex-1 overflow-auto hidden md:block max-w-[600px]">
+<div class="flex flex-col-reverse lg:flex-row lg:overflow-hidden lg:max-h-screen">
+	<div class="flex-1 overflow-auto lg:max-w-[600px]">
 		<div class="min-h-[80vh]">
 			<header class="px-4 flex justify-between items-center pt-2">
 				<div class="py-2">
@@ -246,7 +246,7 @@
 		</footer>
 	</div>
 
-	<aside class="flex-1 w-full md:w-1/2 h-screen">
+	<aside class="flex-1">
 		<MapLibre
 			bind:this={mapLibre}
 			bind:map={myMap}

@@ -9,7 +9,7 @@
 
 	$: {
 		mapExplorer.unhighlightAllMapMarkers();
-		mapExplorer.setZoom(15);
+		mapExplorer.setZoom(12);
 		mapExplorer.setCenter({
 			lat: data.monument.lat,
 			lon: data.monument.lon
