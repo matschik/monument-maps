@@ -189,6 +189,7 @@
 						<button
 							class="group relative inline-flex h-8 text-sm items-center justify-center overflow-hidden rounded-md bg-neutral-950 px-6 font-medium text-neutral-200 duration-500"
 							disabled={isLoadingData}
+							tabindex="-1"
 						>
 							{#if isLoadingData}
 								<LoadingIcon class="w-[2rem] h-[0.88rem]" />
