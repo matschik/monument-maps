@@ -1,28 +1,31 @@
 <script context="module" lang="ts">
 	import 'maplibre-gl/dist/maplibre-gl.css';
+	import type { MarkerOptions } from 'maplibre-gl';
 	export type MarkerData = {
 		id: string;
 		latitude: number;
 		longitude: number;
-		options: maplibregl.MarkerOptions;
+		options: MarkerOptions;
 		data: any;
 	};
 </script>
 
 <script lang="ts">
 	import maplibregl from 'maplibre-gl';
+	import type { MapOptions, LngLatLike } from 'maplibre-gl';
 	import { onMount, onDestroy, createEventDispatcher } from 'svelte';
 	import { PUBLIC_MAP_KEY } from '$env/static/public';
 	import { derived, writable } from 'svelte/store';
 	import { isWebglSupported, reactiveMap } from '$lib/utils';
 	import type { Bounds } from '$lib/types';
+	import throttle from 'lodash.throttle';
 
-	export let initialMapOptions: Partial<maplibregl.MapOptions> = {};
+	export let initialMapOptions: Partial<MapOptions> = {};
 
 	let mapContainer: HTMLDivElement;
 	export let map: maplibregl.Map;
 	export const zoom = writable<number>();
-	export const center = writable<maplibregl.LngLatLike>();
+	export const center = writable<LngLatLike>();
 	export const bounds = writable<Bounds>();
 
 	const dispatch = createEventDispatcher();
@@ -88,9 +91,9 @@
 
 			updateMapStores();
 
-			map.on('move', () => {
-				updateMapStores();
-			});
+			const throttledUpdateMapStores = throttle(updateMapStores, 400);
+
+			map.on('move', throttledUpdateMapStores);
 			dispatch('init');
 		}
 	});

@@ -11,8 +11,7 @@ export const MONUMENT_MICHELIN: Monument = {
 	lon: 2.2340062865071264,
 	type: 'node',
 	name: PLACE_MICHELIN.title,
-	imageURL:
-		'https://lh3.googleusercontent.com/p/AF1QipO1fVxR5o44KsQRVQ48WHvUs0MUotgdCbSZ5ltF=s680-w680-h510'
+	imageURL: '/michelin-boulogne.jpg'
 };
 
 export const dbcity: { [key: string]: { title: string; bounds: Bounds } } = {
