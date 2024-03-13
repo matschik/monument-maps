@@ -32,6 +32,7 @@
 	let mapLibre: MapLibre;
 	let map: maplibregl.Map;
 	let mapBounds: Writable<Bounds>;
+	let explorerEl: HTMLDivElement;
 
 	let mapIsLoaded = false;
 	const onMapInitCallbacks: (() => void)[] = [];
@@ -62,6 +63,7 @@
 			setMonuments(initialData.place.monuments);
 			onMapLoad(() => {
 				mapMarkerAPI.unhighlightAll();
+				explorerEl?.scrollTo(0, 0);
 			});
 		} else if (initialData.monument) {
 			setZoom(12);
@@ -72,6 +74,7 @@
 				if (initialData.monument?.id) {
 					mapMarkerAPI.highlight(initialData.monument.id);
 				}
+				explorerEl?.scrollTo(0, 0);
 			});
 		}
 	}
@@ -173,7 +176,7 @@
 </script>
 
 <div class="flex flex-col-reverse lg:flex-row lg:overflow-hidden lg:max-h-screen">
-	<div class="flex-1 overflow-auto lg:max-w-[600px]">
+	<div bind:this={explorerEl} class="flex-1 overflow-auto lg:max-w-[600px]">
 		<div class="min-h-[80vh]">
 			<header class="px-4 flex justify-between items-center py-2">
 				<div class="py-2">
