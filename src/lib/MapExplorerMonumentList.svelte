@@ -28,11 +28,7 @@
 				>
 					<div class="flex-shrink-0">
 						{#if monument.imageURL.trim()}
-							<img
-								class="size-10 rounded-full bg-red-700"
-								src={monument.imageURL}
-								alt={monument.name}
-							/>
+							<img class="size-10 rounded-full bg-red-700" src={monument.imageURL} alt="" />
 						{:else}
 							<div
 								class="bg-red-700 rounded-full size-10 text-white flex justify-center items-center"

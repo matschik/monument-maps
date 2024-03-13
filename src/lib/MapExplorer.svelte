@@ -232,7 +232,7 @@
 			<nav>
 				<div class="flex flex-col text-sm">
 					<h2 class="text-base font-bold mt-4">Monument</h2>
-					<div class="flex flex-col text-sm">
+					<div class="flex flex-col space-y-2 mt-2 text-sm">
 						{#each footerLinks.monuments as monument}
 							<a href={monument.href} class="text-blue-600 hover:text-blue-500 underline">
 								<span>{monument.name}</span>
