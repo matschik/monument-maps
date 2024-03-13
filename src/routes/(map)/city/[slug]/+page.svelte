@@ -1,7 +1,7 @@
 <script lang="ts">
 	import MapExplorerMonumentList from '$lib/MapExplorerMonumentList.svelte';
 	import type { PageData } from './$types';
-	import { getContext } from 'svelte';
+	import { getContext, onDestroy } from 'svelte';
 
 	export let data: PageData;
 
@@ -9,13 +9,13 @@
 	const mapExplorer = getMapExplorer();
 
 	$: {
-		mapExplorer.setBounds(data.city.bounds);
-		mapExplorer.setMonuments(data.city.monuments);
+		mapExplorer.setBounds(data.place.bounds);
+		mapExplorer.setMonuments(data.place.monuments);
 	}
 </script>
 
 <svelte:head>
-	<title>{data.city.title} - Monument Maps</title>
+	<title>{data.place.title} - Monument Maps</title>
 </svelte:head>
 
 <MapExplorerMonumentList />

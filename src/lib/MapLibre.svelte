@@ -56,6 +56,18 @@
 		}
 	}
 
+	export function addMarkers(markersData: MarkerData[]) {
+		if (!Array.isArray(markersData)) return;
+		for (const markerData of markersData) {
+			if (!markerMap.has(markerData.id)) {
+				const marker = new maplibregl.Marker(markerData.options)
+					.setLngLat([markerData.longitude, markerData.latitude])
+					.addTo(map);
+				markerMap.set(markerData.id, { marker, data: markerData });
+			}
+		}
+	}
+
 	export function resetMarkers() {
 		for (const [id, { marker }] of markerMap.get()) {
 			marker.remove();

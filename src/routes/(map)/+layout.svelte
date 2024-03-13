@@ -22,7 +22,5 @@
 </svelte:head>
 
 <MapExplorer bind:this={mapExplorer} bind:mapMonuments>
-	{#if mapExplorer}
-		<slot />
-	{/if}
+	<slot />
 </MapExplorer>

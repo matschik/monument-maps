@@ -2,24 +2,9 @@
 	import LandmarkIcon from 'lucide-svelte/icons/landmark';
 	import { getContext } from 'svelte';
 
-	const { getMapMonuments }: any = getContext('mapExplorerLayout');
+	const { getMapExplorer, getMapMonuments }: any = getContext('mapExplorerLayout');
+	const mapExplorer = getMapExplorer();
 	const mapMonuments = getMapMonuments();
-
-	function highlightMapMarker(itemId: string) {
-		const monument = document.querySelector(`[data-marker-monument='${itemId}']`);
-
-		if (monument && !monument.classList.contains('animate-bounce')) {
-			monument.classList.add('animate-bounce');
-		}
-	}
-
-	function unhighlightMapMarker(itemId: string) {
-		const monument = document.querySelector(`[data-marker-monument='${itemId}']`);
-
-		if (monument && monument.classList.contains('animate-bounce')) {
-			monument.classList.remove('animate-bounce');
-		}
-	}
 </script>
 
 <div>
@@ -30,8 +15,8 @@
 		{#each $mapMonuments as $mapMonument}
 			<a
 				href={`/monument/${$mapMonument.id}`}
-				on:mouseenter={() => highlightMapMarker($mapMonument.id)}
-				on:mouseleave={() => unhighlightMapMarker($mapMonument.id)}
+				on:mouseenter={() => mapExplorer.highlightMapMarker($mapMonument.id)}
+				on:mouseleave={() => mapExplorer.unhighlightMapMarker($mapMonument.id)}
 			>
 				<div
 					class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400"
