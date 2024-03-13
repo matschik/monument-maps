@@ -4,7 +4,6 @@
 	import { type Writable, type Readable, derived } from 'svelte/store';
 	import type { Monument } from '$lib/api';
 	import { type Bounds } from '$lib/utils';
-	import LandmarkIcon from 'lucide-svelte/icons/landmark';
 	import SearchIcon from 'lucide-svelte/icons/search';
 	import ArrowRightIcon from 'lucide-svelte/icons/arrow-right';
 	import LoadingIcon from '$lib/LoadingIcon.svelte';
@@ -160,7 +159,7 @@
 				<div class="py-2">
 					<a href="/">
 						<h1 class="text-xl text-red-700 font-bold flex items-center space-x-2">
-							<LandmarkIcon width="15" height="15" class="size-6" />
+							<img src="/favicon.png" alt="logo" class="size-6" />
 							<span>Monument Maps</span>
 						</h1>
 					</a>

@@ -28,6 +28,9 @@ const dbcity: { [key: string]: { title: string; bounds: Bounds } } = {
 
 export const load: PageServerLoad = async ({ params }) => {
 	const cityFromDb = dbcity[params.slug];
+	if (!cityFromDb) {
+		error(404, 'Not found');
+	}
 	const monuments = await fetchMonuments(cityFromDb.bounds);
 	if (cityFromDb) {
 		return {

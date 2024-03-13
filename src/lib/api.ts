@@ -6,6 +6,7 @@ import {
 	fetchOverpassMonumentById
 } from './overpassApi';
 import { MONUMENT_MICHELIN } from './constants';
+import { error } from '@sveltejs/kit';
 
 export type Monument = {
 	id: string;
@@ -16,11 +17,17 @@ export type Monument = {
 	imageURL: string;
 };
 
-export async function fetchMonumentById(id: string): Promise<Monument> {
+export async function fetchMonumentById(id: string): Promise<Monument | undefined> {
 	if (id === MONUMENT_MICHELIN.id) {
 		return MONUMENT_MICHELIN;
 	}
+	if (!id || Number.isNaN(Number(id))) {
+		error(404, 'Not found');
+	}
 	const monumentFromOverpass = await fetchOverpassMonumentById(id);
+	if (!monumentFromOverpass) {
+		return;
+	}
 	const monument = await overpassMonumentToMonument(monumentFromOverpass);
 	return monument;
 }
