@@ -2,14 +2,12 @@
 	import MapLibre from '$lib/MapLibre.svelte';
 	import maplibregl from 'maplibre-gl';
 	import { type Writable } from 'svelte/store';
-	import type { Monument } from '$lib/api';
-	import { type Bounds } from '$lib/utils';
 	import SearchIcon from 'lucide-svelte/icons/search';
 	import ArrowRightIcon from 'lucide-svelte/icons/arrow-right';
 	import LoadingIcon from '$lib/LoadingIcon.svelte';
 	import MapLibreMarker from '$lib/MapLibreMarker.svelte';
 	import { navigating } from '$app/stores';
-	import type { Place } from '$lib/constants';
+	import type { Place, Monument, Bounds } from '$lib/types';
 
 	export let initialData: {
 		place?: Place;
@@ -175,7 +173,7 @@
 <div class="flex flex-col-reverse lg:flex-row lg:overflow-hidden lg:max-h-screen">
 	<div class="flex-1 overflow-auto lg:max-w-[600px]">
 		<div class="min-h-[80vh]">
-			<header class="px-4 flex justify-between items-center pt-2">
+			<header class="px-4 flex justify-between items-center py-2">
 				<div class="py-2">
 					<a href="/">
 						<h1 class="text-xl text-red-700 font-bold flex items-center space-x-2">

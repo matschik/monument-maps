@@ -1,4 +1,4 @@
-import type { Bounds } from './utils';
+import type { Bounds } from '$lib/types';
 import type { OverpassJson, OverpassNode } from 'overpass-ts';
 import { overpass } from 'overpass-ts';
 

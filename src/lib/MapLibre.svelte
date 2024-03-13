@@ -14,7 +14,8 @@
 	import { onMount, onDestroy, createEventDispatcher } from 'svelte';
 	import { PUBLIC_MAP_KEY } from '$env/static/public';
 	import { derived, writable } from 'svelte/store';
-	import { isWebglSupported, reactiveMap, type Bounds } from '$lib/utils';
+	import { isWebglSupported, reactiveMap } from '$lib/utils';
+	import type { Bounds } from '$lib/types';
 
 	export let initialMapOptions: Partial<maplibregl.MapOptions> = {};
 

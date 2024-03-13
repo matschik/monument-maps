@@ -1,4 +1,5 @@
 import { writable, type Writable, get } from 'svelte/store';
+import type { Bounds } from './types';
 
 export function writableWithCallback<T>(
 	initialValue: T,
@@ -84,13 +85,6 @@ export function reactiveMap<K, V>(initialValues: Array<[K, V]> = []): ReactiveMa
 		}
 	};
 }
-
-type SouthWestLongitude = number;
-type SouthWestLatitude = number;
-type NorthEastLongitude = number;
-type NorthEastLatitude = number;
-
-export type Bounds = [SouthWestLongitude, SouthWestLatitude, NorthEastLongitude, NorthEastLatitude];
 
 export function isCoordinatesInBounds(coordinates: [number, number], bounds: Bounds) {
 	const [swLong, swLat, neLong, neLat] = bounds;

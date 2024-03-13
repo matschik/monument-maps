@@ -1,7 +1,7 @@
 import type { LayoutServerLoad } from './$types';
-import { fetchMonumentById, fetchMonuments, type Monument } from '$lib/api';
-import { MONUMENT_MICHELIN, PLACE_MICHELIN, dbcity, type Place } from '$lib/constants';
-import type { Bounds } from '$lib/utils';
+import { fetchMonumentById, fetchMonuments } from '$lib/api';
+import { MONUMENT_MICHELIN, PLACE_MICHELIN, dbcity } from '$lib/constants';
+import type { Bounds, Place, Monument } from '$lib/types';
 
 export const load: LayoutServerLoad = async ({ route, params, url }) => {
 	let data:

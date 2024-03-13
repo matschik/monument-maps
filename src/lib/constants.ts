@@ -1,11 +1,4 @@
-import type { Monument } from './api';
-import type { Bounds } from './utils';
-
-export type Place = {
-	title: string;
-	bounds: Bounds;
-	monuments: Monument[];
-};
+import type { Monument, Bounds } from '$lib/types';
 
 export const PLACE_MICHELIN: { title: string; bounds: Bounds } = {
 	title: 'Michelin Boulogne-Billancourt',

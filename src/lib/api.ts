@@ -1,4 +1,5 @@
-import { isCoordinatesInBounds, type Bounds } from '$lib/utils';
+import { isCoordinatesInBounds } from '$lib/utils';
+import type { Bounds, Monument } from '$lib/types';
 import type { OverpassNode } from 'overpass-ts';
 import {
 	fetchOverpassMonumentsOnBounds,
@@ -6,23 +7,13 @@ import {
 	fetchOverpassMonumentById
 } from './overpassApi';
 import { MONUMENT_MICHELIN } from './constants';
-import { error } from '@sveltejs/kit';
-
-export type Monument = {
-	id: string;
-	lat: number;
-	lon: number;
-	type: string;
-	name: string;
-	imageURL: string;
-};
 
 export async function fetchMonumentById(id: string): Promise<Monument | undefined> {
 	if (id === MONUMENT_MICHELIN.id) {
 		return MONUMENT_MICHELIN;
 	}
 	if (!id || Number.isNaN(Number(id))) {
-		error(404, 'Not found');
+		return;
 	}
 	const monumentFromOverpass = await fetchOverpassMonumentById(id);
 	if (!monumentFromOverpass) {
