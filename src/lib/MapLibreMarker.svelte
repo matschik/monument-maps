@@ -1,5 +1,4 @@
 <script lang="ts">
-	import LandmarkIcon from 'lucide-svelte/icons/landmark';
 	export let monumentId: string;
 </script>
 
@@ -8,7 +7,7 @@
 		class="arrow relative text-5 min-w-8 h-8 p-2 rounded flex items-center justify-center bg-red-600 text-white hover:-translate-y-1 transition"
 		data-marker-monument={monumentId}
 	>
-		<LandmarkIcon class="size-5" />
+		<img src="/favicon.png" alt="monument" class="size-5" />
 	</div>
 </a>
 

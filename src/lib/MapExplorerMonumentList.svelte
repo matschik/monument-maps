@@ -1,7 +1,5 @@
 <script lang="ts">
-	import LandmarkIcon from 'lucide-svelte/icons/landmark';
 	import { getContext } from 'svelte';
-
 	const { getMapExplorer, getMapMonuments }: any = getContext('mapExplorerLayout');
 	const mapExplorer = getMapExplorer();
 	const mapMonuments = getMapMonuments();
@@ -28,7 +26,7 @@
 							<div
 								class="bg-red-700 rounded-full size-10 text-white flex justify-center items-center"
 							>
-								<LandmarkIcon width="15" height="15" class="size-5" />
+								<img src="/favicon.png" alt="monument" width="15" height="15" class="size-5" />
 							</div>
 						{/if}
 					</div>
