@@ -1,7 +1,15 @@
 <script lang="ts">
 	import type { Monument } from '$lib/types';
+	import { getContext } from 'svelte';
 
 	export let monuments: Monument[] = [];
+
+	const { mapMarkerAPI } = getContext<{
+		mapMarkerAPI: {
+			highlight: (id: string) => void;
+			unhighlight: (id: string) => void;
+		};
+	}>('mapExplorer');
 </script>
 
 <div>
@@ -10,7 +18,11 @@
 	</div>
 	<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 mt-2">
 		{#each monuments as monument}
-			<a href={`/monument/${monument.id}`}>
+			<a
+				href={`/monument/${monument.id}`}
+				on:mouseenter={() => mapMarkerAPI.highlight(monument.id)}
+				on:mouseleave={() => mapMarkerAPI.unhighlight(monument.id)}
+			>
 				<div
 					class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400"
 				>

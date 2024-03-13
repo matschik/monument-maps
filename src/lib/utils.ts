@@ -1,5 +1,6 @@
 import { writable, type Writable, get } from 'svelte/store';
 import type { Bounds } from './types';
+import { getContext, setContext } from 'svelte';
 
 export function writableWithCallback<T>(
 	initialValue: T,
@@ -97,4 +98,16 @@ export function isCoordinatesInBounds(coordinates: [number, number], bounds: Bou
 	const isLatInBounds = coordLat >= swLat && coordLat <= neLat;
 
 	return isLongInBounds && isLatInBounds;
+}
+
+interface Context<T> {
+	get: () => T;
+	set: (ctx: T) => T;
+}
+
+export function createContext<T>(key: string): Context<T> {
+	return {
+		get: () => getContext<T>(key),
+		set: (ctx: T) => setContext(key, ctx)
+	};
 }

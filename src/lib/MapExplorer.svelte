@@ -8,12 +8,27 @@
 	import MapLibreMarker from '$lib/MapLibreMarker.svelte';
 	import { navigating } from '$app/stores';
 	import type { Place, Monument, Bounds } from '$lib/types';
+	import { setContext } from 'svelte';
 
 	export let initialData: {
 		place?: Place;
 		monument?: Monument;
 	};
 
+	const footerLinks = {
+		cities: [
+			{ name: 'Paris', href: '/city/paris' },
+			{ name: 'Berlin', href: '/city/berlin' },
+			{ name: 'London', href: '/city/london' },
+			{ name: 'Rome', href: '/city/rome' },
+			{ name: 'Ireland', href: '/city/ireland' }
+		],
+		monuments: [
+			{ name: 'Michelin Boulogne-Billancourt', href: '/monument/michelin' },
+			{ name: "Monument des Droits de l'Homme", href: '/monument/4663700857' },
+			{ name: 'Nationaldenkmal für die Befreiungskriege', href: '/monument/241490725' }
+		]
+	};
 	let mapLibre: MapLibre;
 	let map: maplibregl.Map;
 	let mapBounds: Writable<Bounds>;
@@ -154,20 +169,7 @@
 
 	$: isLoadingData = !!$navigating;
 
-	const footerLinks = {
-		cities: [
-			{ name: 'Paris', href: '/city/paris' },
-			{ name: 'Berlin', href: '/city/berlin' },
-			{ name: 'London', href: '/city/london' },
-			{ name: 'Rome', href: '/city/rome' },
-			{ name: 'Ireland', href: '/city/ireland' }
-		],
-		monuments: [
-			{ name: 'Michelin Boulogne-Billancourt', href: '/monument/michelin' },
-			{ name: "Monument des Droits de l'Homme", href: '/monument/4663700857' },
-			{ name: 'Nationaldenkmal für die Befreiungskriege', href: '/monument/241490725' }
-		]
-	};
+	setContext('mapExplorer', { mapMarkerAPI });
 </script>
 
 <div class="flex flex-col-reverse lg:flex-row lg:overflow-hidden lg:max-h-screen">
