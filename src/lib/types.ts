@@ -4,6 +4,20 @@ export type Place = {
 	monuments: Monument[];
 };
 
+export type MapExplorerContext = {
+	setBounds: (bounds: Bounds) => void;
+	setMonuments: (monuments: Monument[]) => void;
+	addMonuments: (monuments: Monument[]) => void;
+	setCenter: (center: [number, number]) => void;
+	setZoom: (zoom: number) => void;
+	mapMarkerAPI: {
+		highlight: (id: string) => void;
+		unhighlight: (id: string) => void;
+		unhighlightAll: () => void;
+	};
+	resetScroll: () => void;
+};
+
 export type Monument = {
 	id: string;
 	lat: number;

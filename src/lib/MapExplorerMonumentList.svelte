@@ -1,15 +1,10 @@
 <script lang="ts">
-	import type { Monument } from '$lib/types';
+	import type { MapExplorerContext, Monument } from '$lib/types';
 	import { getContext } from 'svelte';
 
 	export let monuments: Monument[] = [];
 
-	const { mapMarkerAPI } = getContext<{
-		mapMarkerAPI: {
-			highlight: (id: string) => void;
-			unhighlight: (id: string) => void;
-		};
-	}>('mapExplorer');
+	const { mapMarkerAPI } = getContext<MapExplorerContext>('mapExplorer');
 </script>
 
 <div>
@@ -28,10 +23,10 @@
 				>
 					<div class="flex-shrink-0">
 						{#if monument.imageURL.trim()}
-							<img class="size-10 rounded-full bg-red-700" src={monument.imageURL} alt="" />
+							<img class="size-10 rounded-lg bg-red-600" src={monument.imageURL} alt="" />
 						{:else}
 							<div
-								class="bg-red-700 rounded-full size-10 text-white flex justify-center items-center"
+								class="bg-red-600 rounded-lg size-10 text-white flex justify-center items-center"
 							>
 								<img src="/favicon.png" alt="monument" width="15" height="15" class="size-5" />
 							</div>

@@ -14,7 +14,7 @@ export const MONUMENT_MICHELIN: Monument = {
 	imageURL: '/michelin-boulogne.jpg'
 };
 
-export const dbcity: { [key: string]: { title: string; bounds: Bounds } } = {
+export const cityBySlug: { [key: string]: { title: string; bounds: Bounds } } = {
 	paris: {
 		title: 'Paris',
 		bounds: [2.039583493721267, 48.69117180838387, 2.7633989074665806, 49.00578954101073]

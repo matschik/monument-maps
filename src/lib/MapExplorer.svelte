@@ -10,11 +10,6 @@
 	import type { Place, Monument, Bounds } from '$lib/types';
 	import { setContext } from 'svelte';
 
-	export let initialData: {
-		place?: Place;
-		monument?: Monument;
-	};
-
 	const footerLinks = {
 		cities: [
 			{ name: 'Paris', href: '/city/paris' },
@@ -55,28 +50,6 @@
 		map.once('load', () => {
 			mapIsLoaded = true;
 		});
-	}
-
-	$: {
-		if (initialData.place) {
-			setBounds(initialData.place.bounds);
-			setMonuments(initialData.place.monuments);
-			onMapLoad(() => {
-				mapMarkerAPI.unhighlightAll();
-				explorerEl?.scrollTo(0, 0);
-			});
-		} else if (initialData.monument) {
-			setZoom(12);
-			setCenter([initialData.monument.lon, initialData.monument.lat]);
-			addMonuments([initialData.monument]);
-			onMapLoad(() => {
-				mapMarkerAPI.unhighlightAll();
-				if (initialData.monument?.id) {
-					mapMarkerAPI.highlight(initialData.monument.id);
-				}
-				explorerEl?.scrollTo(0, 0);
-			});
-		}
 	}
 
 	const mapMarkerAPI = {
@@ -135,6 +108,32 @@
 		});
 	}
 
+	setContext('mapExplorer', {
+		mapMarkerAPI: {
+			highlight(itemId: string) {
+				onMapLoad(() => {
+					mapMarkerAPI.highlight(itemId);
+				});
+			},
+			unhighlight(itemId: string) {
+				onMapLoad(() => {
+					mapMarkerAPI.unhighlight(itemId);
+				});
+			},
+			unhighlightAll() {
+				onMapLoad(mapMarkerAPI.unhighlightAll);
+			}
+		},
+		setBounds,
+		setMonuments,
+		addMonuments,
+		setCenter,
+		setZoom,
+		resetScroll() {
+			explorerEl?.scrollTo(0, 0);
+		}
+	});
+
 	function monumentToMarkerData(monument: Monument) {
 		const element = document.createElement('div');
 
@@ -171,8 +170,6 @@
 	}
 
 	$: isLoadingData = !!$navigating;
-
-	setContext('mapExplorer', { mapMarkerAPI });
 </script>
 
 <div class="flex flex-col-reverse lg:flex-row lg:overflow-hidden lg:max-h-screen">
@@ -181,7 +178,7 @@
 			<header class="px-4 flex justify-between items-center py-2">
 				<div class="py-2">
 					<a href="/">
-						<h1 class="text-xl text-red-700 font-bold flex items-center space-x-2">
+						<h1 class="text-xl text-red-600 font-bold flex items-center space-x-2">
 							<img src="/favicon.png" alt="logo" class="size-6" />
 							<span>Monument Maps</span>
 						</h1>
