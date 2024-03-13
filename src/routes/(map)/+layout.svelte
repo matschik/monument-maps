@@ -1,26 +1,14 @@
 <script lang="ts">
 	import MapExplorer from '$lib/MapExplorer.svelte';
-	import type { Monument } from '$lib/api';
-	import { setContext } from 'svelte';
-	import type { Readable } from 'svelte/store';
+	import type { LayoutData } from '../$types';
 
-	let mapExplorer: MapExplorer;
-	let mapMonuments: Readable<Monument[]>;
-
-	setContext('mapExplorerLayout', {
-		getMapExplorer() {
-			return mapExplorer;
-		},
-		getMapMonuments() {
-			return mapMonuments;
-		}
-	});
+	export let data: LayoutData;
 </script>
 
 <svelte:head>
 	<title>Monument Maps</title>
 </svelte:head>
 
-<MapExplorer bind:this={mapExplorer} bind:mapMonuments>
+<MapExplorer initialData={data}>
 	<slot />
 </MapExplorer>

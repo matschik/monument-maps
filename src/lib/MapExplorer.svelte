@@ -1,7 +1,7 @@
 <script lang="ts">
-	import MapLibre, { type MarkerData } from '$lib/MapLibre.svelte';
+	import MapLibre from '$lib/MapLibre.svelte';
 	import maplibregl from 'maplibre-gl';
-	import { type Writable, type Readable, derived } from 'svelte/store';
+	import { type Writable } from 'svelte/store';
 	import type { Monument } from '$lib/api';
 	import { type Bounds } from '$lib/utils';
 	import SearchIcon from 'lucide-svelte/icons/search';
@@ -9,89 +9,115 @@
 	import LoadingIcon from '$lib/LoadingIcon.svelte';
 	import MapLibreMarker from '$lib/MapLibreMarker.svelte';
 	import { navigating } from '$app/stores';
-	import { onMount } from 'svelte';
+	import type { Place } from '$lib/constants';
+
+	export let initialData: {
+		place?: Place;
+		monument?: Monument;
+	};
 
 	let mapLibre: MapLibre;
-	let myMap: maplibregl.Map;
-	let mapCenter: Writable<maplibregl.LngLatLike>;
+	let map: maplibregl.Map;
 	let mapBounds: Writable<Bounds>;
-	let mapZoom: Writable<number>;
-	let metaMarkers: Readable<MarkerData[]>;
-	export let mapMonuments: Readable<Monument[]>;
 
 	let mapIsLoaded = false;
-	function handleMapLoadCallback(callback: () => void) {
-		if (mapIsLoaded) {
-			callback();
+	const onMapInitCallbacks: (() => void)[] = [];
+	function onMapLoad(callback: () => void) {
+		if (map) {
+			if (mapIsLoaded) {
+				callback();
+			} else {
+				map.once('load', callback);
+			}
 		} else {
-			myMap.once('load', callback);
+			onMapInitCallbacks.push(callback);
 		}
 	}
 
-	onMount(() => {
-		mapMonuments = derived(metaMarkers, ($metaMarkers) => {
-			return $metaMarkers.map((m) => m.data);
+	function onMapInit() {
+		for (const callback of onMapInitCallbacks) {
+			callback();
+		}
+		map.once('load', () => {
+			mapIsLoaded = true;
 		});
-	});
+	}
 
-	export function highlightMapMarker(itemId: string) {
-		const monument = document.querySelector(`[data-marker-monument='${itemId}']`);
-
-		if (monument && !monument.classList.contains('animate-bounce')) {
-			monument.classList.add('animate-bounce');
+	$: {
+		if (initialData.place) {
+			setBounds(initialData.place.bounds);
+			setMonuments(initialData.place.monuments);
+			onMapLoad(() => {
+				mapMarkerAPI.unhighlightAll();
+			});
+		} else if (initialData.monument) {
+			setZoom(12);
+			setCenter([initialData.monument.lon, initialData.monument.lat]);
+			addMonuments([initialData.monument]);
+			onMapLoad(() => {
+				mapMarkerAPI.unhighlightAll();
+				if (initialData.monument?.id) {
+					mapMarkerAPI.highlight(initialData.monument.id);
+				}
+			});
 		}
 	}
 
-	export function unhighlightMapMarker(itemId: string) {
-		const monument = document.querySelector(`[data-marker-monument='${itemId}']`);
+	const mapMarkerAPI = {
+		highlight(itemId: string) {
+			const monument = document.querySelector(`[data-marker-monument='${itemId}']`);
 
-		if (monument && monument.classList.contains('animate-bounce')) {
-			monument.classList.remove('animate-bounce');
-		}
-	}
+			if (monument && !monument.classList.contains('animate-bounce')) {
+				monument.classList.add('animate-bounce');
+			}
+		},
+		unhighlight(itemId: string) {
+			const monument = document.querySelector(`[data-marker-monument='${itemId}']`);
 
-	export function unhighlightAllMapMarkers() {
-		const monuments = document.querySelectorAll('[data-marker-monument]');
-
-		for (const monument of monuments) {
-			if (monument.classList.contains('animate-bounce')) {
+			if (monument && monument.classList.contains('animate-bounce')) {
 				monument.classList.remove('animate-bounce');
 			}
-		}
-	}
+		},
+		unhighlightAll() {
+			const monuments = document.querySelectorAll('[data-marker-monument]');
 
-	export function setBounds(bounds: Bounds) {
-		handleMapLoadCallback(() => {
-			myMap.fitBounds(bounds, { animate: false });
+			for (const monument of monuments) {
+				if (monument.classList.contains('animate-bounce')) {
+					monument.classList.remove('animate-bounce');
+				}
+			}
+		}
+	};
+
+	function setBounds(bounds: Bounds) {
+		onMapLoad(() => {
+			map.fitBounds(bounds, { animate: false });
 		});
 	}
 
-	export function setMonuments(monuments: Monument[]) {
-		handleMapLoadCallback(() => {
+	function setMonuments(monuments: Monument[]) {
+		onMapLoad(() => {
 			setMarkersFromMonuments(monuments);
 		});
 	}
 
-	export function addMonuments(monuments: Monument[]) {
-		handleMapLoadCallback(() => {
+	function addMonuments(monuments: Monument[]) {
+		onMapLoad(() => {
 			addMarkersFromMonuments(monuments);
 		});
 	}
 
-	export function setCenter(center: maplibregl.LngLatLike) {
-		handleMapLoadCallback(() => {
-			// console.log('setCenter', { myMap, center });
-			myMap.setCenter(center);
+	function setCenter(center: maplibregl.LngLatLike) {
+		onMapLoad(() => {
+			map.setCenter(center);
 		});
 	}
 
-	export function setZoom(zoom: number) {
-		handleMapLoadCallback(() => {
-			myMap.setZoom(zoom);
+	function setZoom(zoom: number) {
+		onMapLoad(() => {
+			map.setZoom(zoom);
 		});
 	}
-
-	const initialMapOptions: Partial<maplibregl.MapOptions> = {};
 
 	function monumentToMarkerData(monument: Monument) {
 		const element = document.createElement('div');
@@ -126,12 +152,6 @@
 		} else {
 			mapLibre.setMarkers(monuments.map(monumentToMarkerData));
 		}
-	}
-
-	function onMapInit() {
-		myMap.once('load', () => {
-			mapIsLoaded = true;
-		});
 	}
 
 	$: isLoadingData = !!$navigating;
@@ -199,7 +219,7 @@
 					<div class="flex justify-center py-8">
 						<LoadingIcon class="w-[3rem]" />
 					</div>
-				{:else if Array.isArray($mapMonuments)}
+				{:else}
 					<slot />
 				{/if}
 			</main>
@@ -227,7 +247,11 @@
 					</div>
 				</div>
 			</nav>
-			<a href="https://github.com/matschik/monument-maps" class="inline-block mt-4">
+			<a
+				href="https://github.com/matschik/monument-maps"
+				aria-label="Go to Github repository"
+				class="inline-block mt-4"
+			>
 				<svg
 					class="size-5"
 					aria-label="Github"
@@ -247,16 +271,7 @@
 	</div>
 
 	<aside class="flex-1">
-		<MapLibre
-			bind:this={mapLibre}
-			bind:map={myMap}
-			bind:center={mapCenter}
-			bind:bounds={mapBounds}
-			bind:zoom={mapZoom}
-			bind:metaMarkers
-			{initialMapOptions}
-			on:init={onMapInit}
-		/>
+		<MapLibre bind:this={mapLibre} bind:map bind:bounds={mapBounds} on:init={onMapInit} />
 	</aside>
 </div>
 

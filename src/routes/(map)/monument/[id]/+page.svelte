@@ -1,26 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { getContext, onDestroy } from 'svelte';
 
 	export let data: PageData;
-
-	const { getMapExplorer }: any = getContext('mapExplorerLayout');
-	const mapExplorer = getMapExplorer();
-
-	$: {
-		mapExplorer.unhighlightAllMapMarkers();
-		mapExplorer.setZoom(12);
-		mapExplorer.setCenter({
-			lat: data.monument.lat,
-			lon: data.monument.lon
-		});
-		mapExplorer.addMonuments([data.monument]);
-		mapExplorer.highlightMapMarker(data.monument.id);
-	}
-
-	onDestroy(() => {
-		mapExplorer.unhighlightMapMarker(data.monument.id);
-	});
 </script>
 
 <svelte:head>
