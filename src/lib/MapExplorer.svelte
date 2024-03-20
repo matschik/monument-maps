@@ -1,14 +1,30 @@
+<script lang="ts" context="module">
+	import { createContext } from '$lib/utils';
+	export const mapExplorerContext = createContext<{
+		setBounds: (bounds: Bounds) => void;
+		setMonuments: (monuments: Monument[]) => void;
+		addMonuments: (monuments: Monument[]) => void;
+		setCenter: (center: [number, number]) => void;
+		setZoom: (zoom: number) => void;
+		mapMarkerAPI: {
+			highlight: (id: string) => void;
+			unhighlight: (id: string) => void;
+			unhighlightAll: () => void;
+		};
+		resetScroll: () => void;
+	}>('mapExplorer');
+</script>
+
 <script lang="ts">
 	import MapLibre from '$lib/MapLibre.svelte';
-	import maplibregl from 'maplibre-gl';
-	import { type Writable } from 'svelte/store';
+	import type { Map, LngLatLike } from 'maplibre-gl';
+	import type { Writable } from 'svelte/store';
 	import SearchIcon from 'lucide-svelte/icons/search';
 	import ArrowRightIcon from 'lucide-svelte/icons/arrow-right';
 	import LoadingIcon from '$lib/LoadingIcon.svelte';
 	import MapLibreMarker from '$lib/MapLibreMarker.svelte';
 	import { navigating } from '$app/stores';
-	import type { Place, Monument, Bounds } from '$lib/types';
-	import { setContext } from 'svelte';
+	import type { Monument, Bounds } from '$lib/types';
 
 	const footerLinks = {
 		cities: [
@@ -25,7 +41,7 @@
 		]
 	};
 	let mapLibre: MapLibre;
-	let map: maplibregl.Map;
+	let map: Map;
 	let mapBounds: Writable<Bounds>;
 	let explorerEl: HTMLDivElement;
 
@@ -96,7 +112,7 @@
 		});
 	}
 
-	function setCenter(center: maplibregl.LngLatLike) {
+	function setCenter(center: LngLatLike) {
 		onMapLoad(() => {
 			map.setCenter(center);
 		});
@@ -108,7 +124,7 @@
 		});
 	}
 
-	setContext('mapExplorer', {
+	mapExplorerContext.set({
 		mapMarkerAPI: {
 			highlight(itemId: string) {
 				onMapLoad(() => {

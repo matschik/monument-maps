@@ -100,14 +100,13 @@ export function isCoordinatesInBounds(coordinates: [number, number], bounds: Bou
 	return isLongInBounds && isLatInBounds;
 }
 
-interface Context<T> {
-	get: () => T;
-	set: (ctx: T) => T;
-}
-
-export function createContext<T>(key: string): Context<T> {
+export function createContext<T>(name: string) {
 	return {
-		get: () => getContext<T>(key),
-		set: (ctx: T) => setContext(key, ctx)
+		get() {
+			return getContext<T>(name);
+		},
+		set(ctx: T) {
+			return setContext<T>(name, ctx);
+		}
 	};
 }

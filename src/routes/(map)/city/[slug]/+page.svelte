@@ -1,12 +1,11 @@
 <script lang="ts">
 	import MapExplorerMonumentList from '$lib/MapExplorerMonumentList.svelte';
-	import { getContext } from 'svelte';
 	import type { PageData } from './$types';
-	import type { MapExplorerContext } from '$lib/types';
+	import { mapExplorerContext } from '$lib/MapExplorer.svelte';
 
 	export let data: PageData;
 
-	const mapExplorerCtx = getContext<MapExplorerContext>('mapExplorer');
+	const mapExplorerCtx = mapExplorerContext.get();
 
 	$: {
 		mapExplorerCtx.mapMarkerAPI.unhighlightAll();
