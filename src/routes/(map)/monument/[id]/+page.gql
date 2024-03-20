@@ -1,0 +1,10 @@
+query MonumentById($id: ID!) {
+	monumentById(id: $id) {
+		id
+		lat
+		lon
+		type
+		name
+		imageURL
+	}
+}

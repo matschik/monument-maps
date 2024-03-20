@@ -1,30 +1,45 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import LoadingIcon from '$lib/LoadingIcon.svelte';
 	import { mapExplorerContext } from '$lib/MapExplorer.svelte';
+	import type { PageData } from './$houdini';
 
 	export let data: PageData;
+
+	$: ({ MonumentById } = data);
+
+	$: monument = $MonumentById.data?.monumentById;
 
 	const mapExplorerCtx = mapExplorerContext.get();
 
 	$: {
-		mapExplorerCtx.mapMarkerAPI.unhighlightAll();
-		mapExplorerCtx.resetScroll();
-		mapExplorerCtx.setZoom(12);
-		mapExplorerCtx.setCenter([data.monument.lon, data.monument.lat]);
-		mapExplorerCtx.addMonuments([data.monument]);
-		mapExplorerCtx.mapMarkerAPI.highlight(data.monument.id);
+		if (monument) {
+			mapExplorerCtx.mapMarkerAPI.unhighlightAll();
+			mapExplorerCtx.resetScroll();
+			mapExplorerCtx.setZoom(12);
+			mapExplorerCtx.setCenter([monument.lon, monument.lat]);
+			mapExplorerCtx.addMonuments([monument]);
+			mapExplorerCtx.mapMarkerAPI.highlight(monument.id);
+		}
 	}
 </script>
 
 <svelte:head>
-	<title>{data.monument.name} - Monument Maps</title>
+	{#if monument}
+		<title>{monument.name} - Monument Maps</title>
+	{/if}
 </svelte:head>
 
-<div class="mt-6">
-	<h2 class="text-center font-semibold text-lg">{data.monument.name}</h2>
-	{#if data.monument.imageURL.trim()}
-		<div class="flex justify-center">
-			<img src={data.monument.imageURL} alt="" class="mt-4 rounded max-h-lg" />
-		</div>
-	{/if}
-</div>
+{#if $MonumentById.fetching}
+	<div class="flex justify-center py-8">
+		<LoadingIcon class="w-[3rem]" />
+	</div>
+{:else if monument}
+	<div class="mt-6">
+		<h2 class="text-center font-semibold text-lg">{monument.name}</h2>
+		{#if monument.imageURL?.trim()}
+			<div class="flex justify-center">
+				<img src={monument.imageURL} alt="" class="mt-4 rounded max-h-lg" />
+			</div>
+		{/if}
+	</div>
+{/if}

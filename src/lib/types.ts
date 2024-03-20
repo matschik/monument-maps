@@ -1,7 +1,6 @@
 export type Place = {
 	title: string;
 	bounds: Bounds;
-	monuments: Monument[];
 };
 
 export type Monument = {

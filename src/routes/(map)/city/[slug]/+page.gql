@@ -1,0 +1,14 @@
+query CityBySlug($slug: ID!) {
+	placeBySlug(slug: $slug) {
+		title
+		bounds
+	}
+	monumentsByPlaceSlug(slug: $slug) {
+		id
+		lat
+		lon
+		type
+		name
+		imageURL
+	}
+}

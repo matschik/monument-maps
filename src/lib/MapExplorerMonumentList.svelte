@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Monument } from '$lib/types';
 	import { mapExplorerContext } from '$lib/MapExplorer.svelte';
+
 	const { mapMarkerAPI } = mapExplorerContext.get();
 	export let monuments: Monument[] = [];
 </script>

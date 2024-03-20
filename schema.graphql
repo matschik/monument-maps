@@ -1,0 +1,30 @@
+schema {
+	query: Query
+}
+
+type Query {
+	monumentById(id: ID!): Monument!
+	monumentsInBounds(bounds: [Float!]!): MonumentsInBounds!
+	placeBySlug(slug: ID!): Place!
+	monumentsByPlaceSlug(slug: ID!): [Monument!]!
+}
+
+type MonumentsInBounds {
+	monuments: [Monument!]!
+	bounds: [Float!]!
+}
+
+type Monument {
+	id: ID!
+	lat: Float!
+	lon: Float!
+	type: String!
+	name: String!
+	imageURL: String!
+	bounds: [Float!]
+}
+
+type Place {
+	title: String!
+	bounds: [Float!]!
+}

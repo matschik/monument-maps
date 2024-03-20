@@ -5,8 +5,16 @@ import {
 	fetchOverpassMonumentsOnBounds,
 	fetchImageFromWikidata,
 	fetchOverpassMonumentById
-} from './overpassApi';
-import { MONUMENT_MICHELIN } from './constants';
+} from '$lib/overpassApi';
+
+const MONUMENT_MICHELIN: Monument = {
+	id: 'michelin',
+	lat: 48.82785004580804,
+	lon: 2.2340062865071264,
+	type: 'node',
+	name: 'Michelin Boulogne-Billancourt',
+	imageURL: '/michelin-boulogne.jpg'
+};
 
 export async function fetchMonumentById(id: string): Promise<Monument | undefined> {
 	if (id === MONUMENT_MICHELIN.id) {
